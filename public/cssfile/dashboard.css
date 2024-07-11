@@ -1,0 +1,13 @@
+.content-wrapper {
+    background-image: url('../Images/adminpage.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    padding: 10px;
+}
+
+.navbar {
+    color: rgb(20, 19, 19);
+}
+

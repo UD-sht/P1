@@ -1,0 +1,368 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    color: #fff;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.nav-links li {
+    margin-right: 30px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #f39c12;
+}
+
+.cta {
+    display: flex;
+    align-items: center;
+}
+
+.btn {
+    padding: 8px 16px;
+    margin-left: 10px;
+    text-decoration: none;
+    
+    color: #fff;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+.login{
+    background-color: rgba(32, 234, 14, 0.464);
+}
+.register{
+    background-color: rgba(255, 119, 0, 0.63);
+}
+
+.btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Hero section */
+/* .hero {
+    background: url('../Images/img.jpg') no-repeat center center/cover;
+    color: #fff;
+    padding: 100px 0;
+    text-align: center;
+} */
+
+
+
+
+
+
+
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Adjust height as needed */
+    overflow: hidden;
+}
+
+.video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Ensure video is behind other content */
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.container {
+    position: relative;
+    z-index: 1; /* Ensure hero content is above the video */
+    padding: 20px; /* Adjust padding as needed */
+    text-align: center; /* Center align content */
+    color: #fff; /* Text color */
+}
+
+.hero-content {
+    max-width: 600px; /* Adjust content width */
+    margin: 0 auto; 
+    justify-content: center;
+
+}
+
+.hero h1 {
+    font-size: 3rem; /* Adjust font size */
+    margin-bottom: 20px; /* Adjust margin */
+}
+
+.hero p {
+    font-size: 1.5rem; /* Adjust font size */
+    line-height: 1.6; /* Adjust line height */
+}
+
+
+
+
+
+
+
+/* Features section */
+.features {
+    background-color: #2e2c2adb;
+    padding: 80px 0;
+    text-align: center;
+    color: white;
+}
+
+.feature {
+    margin-bottom: 40px;
+}
+
+.feature h2 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    font-size: 1.2em;
+    line-height: 1.6;
+}
+
+/* Footer section */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+footer p {
+    font-size: 1em;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo {
+        font-size: 1.2em;
+    }
+
+    .hero h1 {
+        font-size: 2.5em;
+    }
+
+    .hero p {
+        font-size: 1.2em;
+    }
+
+    .feature h2 {
+        font-size: 2em;
+    }
+
+    .feature p {
+        font-size: 1em;
+    }
+
+
+    
+        .navbar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    
+        .nav-links {
+            display: none;
+        }
+    
+    
+        .cta {
+            margin-top: 10px;
+        }
+    
+        .btn {
+            margin-left: 5px;
+            margin-top: 5px;
+        }
+    }
+
+
+/* homepage.css */
+   /* Modal styles */
+   .modal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.584); /* Black w/ opacity */
+    padding-top: 100px; /* Location of the modal header */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 30px 10px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+form {
+    padding: 20px;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    font-size: 24px;
+    text-align: center;
+}
+
+.modal-content label {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="email"],
+.modal-content input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.modal-content button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    float: left;
+}
+
+.modal-content button:hover {
+    background-color: #101110;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Responsive layout - makes the modal smaller on mobile */
+@media screen and (max-width: 600px) {
+    .modal-content {
+        width: 100%;
+    }
+}
+
+
+
+
+.alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    z-index: 1;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-dismissible {
+    padding-right: 4rem;
+}
+
+.close {
+    float: right;
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.5;
+}
+
+.close:hover {
+    color: #000;
+    text-decoration: none;
+    opacity: 0.75;
+}

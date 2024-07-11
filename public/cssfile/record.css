@@ -1,0 +1,159 @@
+.import_export_container,
+.search-container {
+    padding: 5px; /* Adjust as needed */
+    font-size: 14px; /* Adjust as needed */
+}
+
+.import_export_container input,
+.search-container input,
+.import_export_container select,
+.search-container select,
+.import_export_container button,
+.search-container button,
+.import_export_container a {
+    font-size: 12px; /* Adjust as needed */
+    margin-bottom: 5px; /* Adjust as needed */
+}
+
+.master-sample h6,
+.search-container h6 {
+    font-size: 14px; /* Adjust as needed */
+    margin-bottom: 5px; /* Adjust as needed */
+}
+
+
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+
+.pagination li {
+    margin: 0 2px;
+}
+.pagination li a, .pagination li span {
+    color: black;
+    text-decoration: none;
+    padding: 3px 10px;
+    border: 1px solid #675959;
+    border-radius: 4px;
+    transition: background-color .3s;
+}
+.pagination li a:hover:not(.active) {
+    background-color: #ddd;
+}
+
+
+
+
+
+
+    .citizen-container {
+        font-size: 0.875rem; /* Smaller font size */
+    }
+
+    .editform .form-group {
+        margin-bottom: 10px;
+    }
+
+    .editform .form-control {
+        padding: 0.25rem 0.5rem; /* Smaller padding */
+        font-size: 0.875rem; /* Smaller font size */
+        height: auto; /* Adjust height */
+    }
+
+    .editform label {
+        font-size: 0.875rem; /* Smaller font size for labels */
+    }
+
+    .editform button {
+        font-size: 0.875rem; /* Smaller font size for buttons */
+        padding: 0.25rem 0.5rem; /* Smaller padding for buttons */
+    }
+
+    .back button {
+        font-size: 0.875rem; /* Smaller font size for back button */
+        padding: 0.25rem 0.5rem; /* Smaller padding for back button */
+    }
+
+    @media screen and (max-width: 768px) {
+        .citizen-container {
+            padding: 10px;
+        }
+
+        .editform .form-group {
+            margin-bottom: 10px;
+        }
+
+        .back {
+            text-align: center;
+        }
+    }
+/* Ensure table elements are responsive */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Adjust button padding for different screen sizes */
+.btn-sm {
+    padding: 5px 10px;
+}
+
+/* Custom adjustments for small devices */
+@media (max-width: 576px) {
+    .form-inline .form-group {
+        display: block;
+        width: 100%;
+    }
+
+    .form-inline .form-group + .form-group {
+        margin-top: 10px;
+    }
+
+    .import_export_container .form-row {
+        flex-direction: column;
+    }
+
+    .import_export_container .col-auto {
+        width: 100%;
+    }
+
+    .import_export_container .col-auto.mb-1 {
+        margin-bottom: 10px;
+    }
+
+    .sample-download {
+        text-align: left;
+    }
+}
+
+/* Additional styling for better appearance */
+.table th, .table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.alert {
+    font-size: 14px;
+    padding: 10px;
+}
+
+
+
