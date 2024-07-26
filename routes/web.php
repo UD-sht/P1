@@ -62,8 +62,7 @@ Route::group(['prefix' => 'citizen'],function()
         Route::get('/logout', [CitizenHomeController::class, 'logout'])->name('citizen.logout');
 
         Route::get('/applicationform', [CitizenFormController::class, 'index'])->name('citizen.form');
-        Route::post('/form/store', [CitizenFormController::class, 'sto
-        re'])->name('citizen.form.store');
+        Route::post('/form/store', [CitizenFormController::class, 'store'])->name('citizen.form.store');
         Route::get('/info/{id}', [CitizenFormController::class, 'view'])->name('citizen.information');
         
     });
