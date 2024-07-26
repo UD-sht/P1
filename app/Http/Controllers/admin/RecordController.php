@@ -20,7 +20,8 @@ use App\Imports\CitizenDataUpdateImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class RecordController extends Controller
+class 
+RecordController extends Controller
 {
     public function index(Request $request)
     {
@@ -73,21 +74,7 @@ class RecordController extends Controller
         }
     }
 
-    public function importLocationData(Request $request)
-    {
-        $request->validate([
-            'import_file' => ['required', 'file'],
-        ]);
-
-        try {
-            Excel::import(new CitizenDataUpdateImport, $request->file('import_file'));
-            return redirect()->route('admin.record')->with('success', 'Location data imported successfully!');
-        } catch (\Exception $e) 
-        {
-            throw $e;
-            // return redirect()->route('admin.record')->with('error', 'Error importing file: ' . $e->getMessage());
-        }
-    }
+ 
 
     public function exportexceldata()
     {

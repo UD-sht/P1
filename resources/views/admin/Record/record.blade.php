@@ -44,19 +44,6 @@
         </div>
             </div>
         </form>
-        <form action="{{ route('importLocationData') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="form-row align-items-center">
-                <div class="col-12 col-sm-auto mb-1">
-                    <label class="sr-only" for="import_location_file">Choose file</label>
-                    <input type="file" id="import_location_file" name="import_file" required
-                        class="form-control-file form-control-sm">
-                </div>
-                <div class="col-12 col-sm-auto mb-1">
-                    <button type="submit" class="btn btn-primary btn-sm mb-1">Import Location Data</button>
-                </div>
-            </div>
-        </form>
         
     </div>
 

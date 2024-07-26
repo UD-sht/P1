@@ -57,4 +57,9 @@ class CitizenFormModel extends Model
         'ward',
     ];
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
 }

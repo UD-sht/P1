@@ -33,12 +33,15 @@ return new class extends Migration
              $table->string('issued_district_name')->nullable();
 
             $table->unsignedBigInteger('province_id')->nullable();
+            $table->string('province')->nullable();
             $table->unsignedBigInteger('district_id')->nullable();
+            $table->string('district')->nullable();
             $table->unsignedBigInteger('muncipality_id')->nullable();
+            $table->string('municipality')->nullable();
             $table->unsignedBigInteger('ward_id')->nullable();
+            $table->string('ward')->nullable();
             $table->string('tole')->nullable();
 
-          
             $table->string('f_name')->nullable(); // Father's name
             $table->string('m_name')->nullable(); // Mother's name
             $table->string('g_name')->nullable(); // Grandfather's name
