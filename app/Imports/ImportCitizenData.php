@@ -2,104 +2,68 @@
 
 namespace App\Imports;
 
+use App\Bsdate\BsdateFacade;
 use App\Models\CitizenFormModel;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-use App\Bsdate\BsdateFacade;
 
 class ImportCitizenData implements ToCollection, WithHeadingRow, WithCustomCsvSettings
 {
-    /**
-     * @param Collection $collection
-     */
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
+            $AD_Dob = $this->convertExcelDate($row['dob_ad']);
+            $AD_CitizenshipIssuedDate = $this->convertExcelDate($row['citizenship_issued_date_ad']);
 
-            $AD_Dob = Date::excelToDateTimeObject($row['dob_ad'])->format('Y-m-d');
-            $AD_CitizenshipIssuedDate = Date::excelToDateTimeObject($row['citizenship_issued_date_ad'])->format('Y-m-d');
+            $BS_Dob = $this->isValidDateRange($AD_Dob) ? BsdateFacade::eng_to_nep($AD_Dob) : null;
+            $BS_CitizenshipIssuedDate = $this->isValidDateRange($AD_CitizenshipIssuedDate) ? BsdateFacade::eng_to_nep($AD_CitizenshipIssuedDate) : null;
 
-            if ($this->isValidDateRange($AD_Dob) && $this->isValidDateRange($AD_CitizenshipIssuedDate)) {
-                $BS_Dob = BsdateFacade::eng_to_nep($AD_Dob);
-                $BS_CitizenshipIssuedDate = BsdateFacade::eng_to_nep($AD_CitizenshipIssuedDate);
-            } else {
-                $BS_Dob = null;
-                $BS_CitizenshipIssuedDate = null;
-            }
+            $citi = $this->normalizeCitizenshipNumber($row['citizenship_number']);
 
-            $citi = $row['citizenship_number'];
+            // Set IDs based on values; handle nulls appropriately
+            $issue_id = $this->getIssueId($row['citizenship_issued_district']);
+            $dis = $this->getDistrictId($row['district']);
+            $mun = $this->getMunicipalityId($row['municipality']);
+            $pro = $this->getProvinceId($row['province']);
 
-            $englishNumbers = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-            $nepaliUnicode = array('०', '१', '२', '३', '४', '५', '६', '७', '८', '९');
+            // Convert empty strings to null for bigint fields
+            $issue_id = $this->ensureInteger($issue_id);
+            $dis = $this->ensureInteger($dis);
+            $mun = $this->ensureInteger($mun);
+            $pro = $this->ensureInteger($pro);
 
-            $citi = str_replace($nepaliUnicode, $englishNumbers, $row['citizenship_number']);
-            if(!(int)$citi) {
-                $citi = NULL;
-            }
-
-
-            if ($row['citizenship_issued_district'] == 'अर्घाखाँची') {
-                $issue_id = '48';
-            } else {
-                $issue_id = null;
-            }
-
-            if ($row['district'] == 'अर्घाखाँची') {
-                $dis = '48';
-            } else {
-                $dis = null;
-            }
-
-            if ($row['municipality'] == 'सन्धिखर्क नगरपालिका') {
-                $mun = '485';
-            } else {
-                $mun = null;
-            }
-
-            if ($row['province'] == 'लुम्बिनी प्रदेश') {
-                $pro = '5';
-            } else {
-                $pro = null;
-            }
-
+            // Update or create the citizen record
             CitizenFormModel::updateOrCreate([
                 'hhid' => $row['hhid'],
                 'hh_index' => $row['hh_index'],
-
-
                 'first_name' => $row['first_name'],
                 'last_name' => $row['last_name'],
                 'full_name' => $row['full_name'],
                 'full_name_en_block' => $row['full_name_en_block'],
-
                 'dob_ad' => $AD_Dob,
                 'dob_bs' => $BS_Dob,
-
                 'citizenship_number' => $citi,
                 'citizenship_issued_date' => $BS_CitizenshipIssuedDate,
                 'citizenship_issued_date_ad' => $AD_CitizenshipIssuedDate,
                 'citizenship_issued_district_id' => $issue_id,
-                'citizenship_issued_district' => $row['citizenship_issued_district'],
-                'no_citizenship_reason' => $row['no_citizenship_reason'],
-
+                'citizenship_issued_district' => $row['citizenship_issued_district'] ?? null,
+                'no_citizenship_reason' => $row['no_citizenship_reason'] ?? null,
                 'province_id' => $pro,
                 'district_id' => $dis,
-                'muncipality_id' => $mun,
-                'ward' => $row['ward'],
-                'blood_group' => $row['blood_group'],
-
-                'citizenship_front' => $row['citizenship_front'],
-                'citizenship_front_url' => $row['citizenship_front_url'],
-                'citizenship_back' => $row['citizenship_back'],
-                'citizenship_back_url' => $row['citizenship_back_url'],
-
-                'gender' => $row['gender'],
-                'mobile_number' => $row['mobile_number'],
-                'email_address' => $row['email_address'],
-
+                'municipality_id' => $mun,
+                'ward' => $row['ward'] ?? null,
+                'blood_group' => $row['blood_group'] ?? null,
+                'citizenship_front' => $row['citizenship_front'] ?? null,
+                'citizenship_front_url' => $row['citizenship_front_url'] ?? null,
+                'citizenship_back' => $row['citizenship_back'] ?? null,
+                'citizenship_back_url' => $row['citizenship_back_url'] ?? null,
+                'gender' => $row['gender'] ?? null,
+                'mobile_number' => $row['mobile_number'] ?? null,
+                'email_address' => $row['email_address'] ?? null,
                 'province' => $row['province'] ?? null,
                 'district' => $row['district'] ?? null,
                 'municipality' => $row['municipality'] ?? null,
@@ -107,11 +71,85 @@ class ImportCitizenData implements ToCollection, WithHeadingRow, WithCustomCsvSe
         }
     }
 
-    /**
-     * Specify the CSV settings for Excel parsing.
-     *
-     * @return array
-     */
+
+    private function normalizeCitizenshipNumber(?string $number): ?string
+    {
+        if (is_null($number) || trim($number) === '') {
+            return null;
+        }
+        $number = $this->convertNepaliToEnglishNumber($number);
+        $invalidPatterns = [
+            '/^(0|00|000|0000|00000|000000|00000000)$/',
+            '/^\s*$/',
+        ];
+        foreach ($invalidPatterns as $pattern) {
+            if (preg_match($pattern, $number)) {
+                return null;
+            }
+        }
+        $validPatterns = [
+            '/^[0-9]+[-\/][0-9]+[-\/][0-9]+[-\/][0-9]+$/',
+            '/^[0-9]+[\/][0-9]+$/',
+        ];
+        foreach ($validPatterns as $pattern) {
+            if (preg_match($pattern, $number)) {
+                return $number;
+            }
+        }
+        return null;
+    }
+
+
+    private function convertExcelDate($date): ?string
+    {
+        if (is_string($date) && strtotime($date) !== false) {
+            return date('Y-m-d', strtotime($date));
+        }
+        if (empty($date) || !is_numeric($date)) {
+            return null;
+        }
+
+        try {
+            $dateTime = Date::excelToDateTimeObject((int) $date);
+            $formattedDate = $dateTime->format('Y-m-d');
+            return $formattedDate;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    private function convertNepaliToEnglishNumber(string $number): string
+    {
+        $englishNumbers = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+        $nepaliUnicode = array('०', '१', '२', '३', '४', '५', '६', '७', '८', '९');
+        return str_replace($nepaliUnicode, $englishNumbers, $number);
+    }
+
+    private function getIssueId(string $district): ?int
+    {
+        return $district === 'अर्घाखाँची' ? 48 : null;
+    }
+
+    private function getDistrictId(string $district): ?int
+    {
+        return $district === 'अर्घाखाँची' ? 48 : null;
+    }
+
+    private function getMunicipalityId(string $municipality): ?int
+    {
+        return $municipality === 'सन्धिखर्क नगरपालिका' ? 485 : null;
+    }
+
+    private function getProvinceId(string $province): ?int
+    {
+        return $province === 'लुम्बिनी प्रदेश' ? 5 : null;
+    }
+
+    private function ensureInteger(?string $value): ?int
+    {
+        return is_numeric($value) && $value !== '' ? (int) $value : null;
+    }
+
     public function getCsvSettings(): array
     {
         return [
@@ -120,18 +158,15 @@ class ImportCitizenData implements ToCollection, WithHeadingRow, WithCustomCsvSe
             'enclosure' => '"',
             'line_ending' => "\r\n",
             'use_bom' => false,
-            'date_format' => 'm/d/Y', // Specify the date format of your Excel file
+            'date_format' => 'm/d/Y', // Adjust if needed
         ];
     }
 
-    /**
-     * Validate if the given date is within the supported range (1944-2022).
-     *
-     * @param string $date
-     * @return bool
-     */
-    private function isValidDateRange(string $date): bool
+    private function isValidDateRange(?string $date): bool
     {
+        if (is_null($date)) {
+            return false;
+        }
         $year = (int) date('Y', strtotime($date));
         return $year >= 1944 && $year <= 2023;
     }

@@ -57,7 +57,7 @@
                 </div>
             </div>
         </form>
-        
+
     </div>
 
     <div class="search-container mb-1">
@@ -101,8 +101,12 @@
 
                             <th>First Name</th>
                             <th>Last name</th>
+                            <th>Full name</th>
+                            <th>DOB_AD</th>
+                            <th>DOB_NP</th>
                             <th>Citizenship No</th>
                             <th>Issue Date</th>
+                            <th>Issue Date Np</th>
                             <th>Contact No</th>
 
                             <th>Province</th>
@@ -120,10 +124,14 @@
 
                                 <td>{{ $citizen->hhid }}</td>
 
-                                <td>{{ $citizen->np_first_name }}</td>
-                                <td>{{ $citizen->np_last_name }}</td>
+                                <td>{{ $citizen->first_name }}</td>
+                                <td>{{ $citizen->last_name }}</td>
+                                <td>{{ $citizen->full_name }}</td>
+                                <td>{{ $citizen->dob_ad }}</td>
+                                <td>{{ $citizen->dob_bs }}</td>
                                 <td>{{ $citizen->citizenship_number }}</td>
-                                <td>{{ $citizen->issued_date_ad }}</td>
+                                <td>{{ $citizen->citizenship_issued_date_ad }}</td>
+                                <td>{{ $citizen->citizenship_issued_date }}</td>
                                 <td>{{ $citizen->mobile_number }}</td>
 
                                 <td>{{ $citizen->province }}</td>
