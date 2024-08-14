@@ -19,18 +19,13 @@ class ImportCitizenData implements ToCollection, WithHeadingRow, WithCustomCsvSe
     {
         foreach ($rows as $row) {
 
-            // Convert AD dates to formatted strings
             $AD_Dob = Date::excelToDateTimeObject($row['dob_ad'])->format('Y-m-d');
-            $AD_CitizenshipIssuedDate = Date::excelToDateTimeObject($row['issued_date_ad'])->format('Y-m-d');
+            $AD_CitizenshipIssuedDate = Date::excelToDateTimeObject($row['citizenship_issued_date_ad'])->format('Y-m-d');
 
-
-            // Validate the AD dates
             if ($this->isValidDateRange($AD_Dob) && $this->isValidDateRange($AD_CitizenshipIssuedDate)) {
-                // Convert AD dates to BS dates using BsdateFacade
                 $BS_Dob = BsdateFacade::eng_to_nep($AD_Dob);
                 $BS_CitizenshipIssuedDate = BsdateFacade::eng_to_nep($AD_CitizenshipIssuedDate);
             } else {
-                // Handle dates outside the supported range (e.g., set to null or some default value)
                 $BS_Dob = null;
                 $BS_CitizenshipIssuedDate = null;
             }
@@ -44,10 +39,9 @@ class ImportCitizenData implements ToCollection, WithHeadingRow, WithCustomCsvSe
             if(!(int)$citi) {
                 $citi = NULL;
             }
-    
 
 
-            if ($row['issued_district_name'] == 'अर्घाखाँची') {
+            if ($row['citizenship_issued_district'] == 'अर्घाखाँची') {
                 $issue_id = '48';
             } else {
                 $issue_id = null;
@@ -71,44 +65,36 @@ class ImportCitizenData implements ToCollection, WithHeadingRow, WithCustomCsvSe
                 $pro = null;
             }
 
-
-
-
-            // Create a new record in CitizenFormModel
-            CitizenFormModel::create([
+            CitizenFormModel::updateOrCreate([
                 'hhid' => $row['hhid'],
+                'hh_index' => $row['hh_index'],
+
 
                 'first_name' => $row['first_name'],
-                'middle_name' => $row['middle_name'],
                 'last_name' => $row['last_name'],
-                'np_first_name' => $row['np_first_name'],
-                'np_middle_name' => $row['np_middle_name'],
-                'np_last_name' => $row['np_last_name'],
+                'full_name' => $row['full_name'],
+                'full_name_en_block' => $row['full_name_en_block'],
 
-                'dob_ad' => $AD_Dob, // AD date of birth
-                'dob_bs' => $BS_Dob, // BS date of birth (Nepali calendar)
+                'dob_ad' => $AD_Dob,
+                'dob_bs' => $BS_Dob,
 
                 'citizenship_number' => $citi,
-                'issued_date' => $BS_CitizenshipIssuedDate, // Nepali date format
-                'issued_date_ad' => $AD_CitizenshipIssuedDate, // AD date format
-                'issued_district_id' => $issue_id,
-                'issued_district_name' => $row['issued_district_name'],
+                'citizenship_issued_date' => $BS_CitizenshipIssuedDate,
+                'citizenship_issued_date_ad' => $AD_CitizenshipIssuedDate,
+                'citizenship_issued_district_id' => $issue_id,
+                'citizenship_issued_district' => $row['citizenship_issued_district'],
+                'no_citizenship_reason' => $row['no_citizenship_reason'],
 
                 'province_id' => $pro,
                 'district_id' => $dis,
                 'muncipality_id' => $mun,
-                'ward_id' => $row['ward_id'],
-                'tole' => $row['tole'],
-
-                'f_name' => $row['f_name'],
-                'm_name' => $row['m_name'],
-                'g_name' => $row['g_name'],
+                'ward' => $row['ward'],
+                'blood_group' => $row['blood_group'],
 
                 'citizenship_front' => $row['citizenship_front'],
                 'citizenship_front_url' => $row['citizenship_front_url'],
                 'citizenship_back' => $row['citizenship_back'],
                 'citizenship_back_url' => $row['citizenship_back_url'],
-                'social_security_fund_number' => $row['social_security_fund_number'],
 
                 'gender' => $row['gender'],
                 'mobile_number' => $row['mobile_number'],
@@ -117,7 +103,6 @@ class ImportCitizenData implements ToCollection, WithHeadingRow, WithCustomCsvSe
                 'province' => $row['province'] ?? null,
                 'district' => $row['district'] ?? null,
                 'municipality' => $row['municipality'] ?? null,
-                'ward' => $row['ward'] ?? null
             ]);
         }
     }
@@ -148,6 +133,6 @@ class ImportCitizenData implements ToCollection, WithHeadingRow, WithCustomCsvSe
     private function isValidDateRange(string $date): bool
     {
         $year = (int) date('Y', strtotime($date));
-        return $year >= 1944 && $year <= 2022;
+        return $year >= 1944 && $year <= 2023;
     }
 }
