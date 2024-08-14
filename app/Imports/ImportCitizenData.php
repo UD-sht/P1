@@ -24,11 +24,11 @@ class ImportCitizenData implements ToCollection, WithHeadingRow, WithCustomCsvSe
 
             $citi = $this->normalizeCitizenshipNumber($row['citizenship_number']);
 
-            // Set IDs based on values; handle nulls appropriately
-            $issue_id = $this->getIssueId($row['citizenship_issued_district']);
-            $dis = $this->getDistrictId($row['district']);
-            $mun = $this->getMunicipalityId($row['municipality']);
-            $pro = $this->getProvinceId($row['province']);
+
+            $issue_id = $this->getIssueId($row['citizenship_issued_district'] ?? '');
+            $dis = $this->getDistrictId($row['district'] ?? '');
+            $mun = $this->getMunicipalityId($row['municipality'] ?? '');
+            $pro = $this->getProvinceId($row['province'] ?? '');
 
             // Convert empty strings to null for bigint fields
             $issue_id = $this->ensureInteger($issue_id);
@@ -125,23 +125,36 @@ class ImportCitizenData implements ToCollection, WithHeadingRow, WithCustomCsvSe
         return str_replace($nepaliUnicode, $englishNumbers, $number);
     }
 
-    private function getIssueId(string $district): ?int
+    private function getIssueId(?string $district): ?int
     {
+        if ($district === null) {
+            return null;
+        }
         return $district === 'अर्घाखाँची' ? 48 : null;
     }
 
-    private function getDistrictId(string $district): ?int
+    private function getDistrictId(?string $district): ?int
     {
+        if ($district === null) {
+            return null;
+        }
         return $district === 'अर्घाखाँची' ? 48 : null;
     }
 
-    private function getMunicipalityId(string $municipality): ?int
+    private function getMunicipalityId(?string $municipality): ?int
     {
+        if ($municipality === null) {
+            return null;
+        }
         return $municipality === 'सन्धिखर्क नगरपालिका' ? 485 : null;
     }
 
-    private function getProvinceId(string $province): ?int
+
+    private function getProvinceId(?string $province): ?int
     {
+        if ($province === null) {
+            return null;
+        }
         return $province === 'लुम्बिनी प्रदेश' ? 5 : null;
     }
 
